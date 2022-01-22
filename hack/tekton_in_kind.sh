@@ -80,7 +80,7 @@ if [ "${running_cluster}" != "$KIND_CLUSTER_NAME" ]; then
 kind: Cluster
 apiVersion: kind.x-k8s.io/v1alpha4
 nodes:
-  - role: control-plane
+- role: control-plane
   kubeadmConfigPatches:
   - |
     kind: InitConfiguration
@@ -94,8 +94,8 @@ nodes:
   - containerPort: 443
     hostPort: 443
     protocol: TCP
-  - role: worker
-  - role: worker
+- role: worker
+- role: worker
 featureGates:
   "EphemeralContainers": true
 containerdConfigPatches:
@@ -120,7 +120,7 @@ kubectl apply -f https://storage.googleapis.com/tekton-releases/triggers/previou
 kubectl apply -f https://github.com/tektoncd/dashboard/releases/download/${TEKTON_DASHBOARD_VERSION}/tekton-dashboard-release.yaml
 
 # Wait until all pods are ready
-sleep 10
+#sleep 10
 #kubectl wait -n tekton-pipelines --for=condition=ready pods --all --timeout=120s
 #kubectl port-forward service/tekton-dashboard -n tekton-pipelines 9097:9097 &> kind-tekton-dashboard.log &
-echo "done..."
+#echo “Tekton Dashboard available at http://localhost:9097”
