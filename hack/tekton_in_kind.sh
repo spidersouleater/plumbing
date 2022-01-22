@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 set -e -o pipefail
 
 declare TEKTON_PIPELINE_VERSION TEKTON_TRIGGERS_VERSION TEKTON_DASHBOARD_VERSION
@@ -81,6 +81,19 @@ kind: Cluster
 apiVersion: kind.x-k8s.io/v1alpha4
 nodes:
   - role: control-plane
+  kubeadmConfigPatches:
+  - |
+    kind: InitConfiguration
+    nodeRegistration:
+      kubeletExtraArgs:
+        node-labels: "ingress-ready=true"
+  extraPortMappings:
+  - containerPort: 80
+    hostPort: 80
+    protocol: TCP
+  - containerPort: 443
+    hostPort: 443
+    protocol: TCP
   - role: worker
   - role: worker
 featureGates:
@@ -108,6 +121,6 @@ kubectl apply -f https://github.com/tektoncd/dashboard/releases/download/${TEKTO
 
 # Wait until all pods are ready
 sleep 10
-kubectl wait -n tekton-pipelines --for=condition=ready pods --all --timeout=120s
-kubectl port-forward service/tekton-dashboard -n tekton-pipelines 9097:9097 &> kind-tekton-dashboard.log &
-echo “Tekton Dashboard available at http://localhost:9097”
+#kubectl wait -n tekton-pipelines --for=condition=ready pods --all --timeout=120s
+#kubectl port-forward service/tekton-dashboard -n tekton-pipelines 9097:9097 &> kind-tekton-dashboard.log &
+echo "done..."
